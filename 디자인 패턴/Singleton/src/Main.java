@@ -1,3 +1,5 @@
+package Singleton.src;
+
 import singleton.AClass;
 import singleton.BClass;
 import singleton.SocketClient;
