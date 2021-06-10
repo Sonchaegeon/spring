@@ -1,5 +1,7 @@
 package com.spring.book.web;
 
+import com.spring.book.config.auth.LoginUser;
+import com.spring.book.config.auth.dto.SessionUser;
 import com.spring.book.service.posts.PostsService;
 import com.spring.book.web.dto.PostsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +17,12 @@ public class IndexController {
     private final PostsService postsService;
 
     @GetMapping("/")
-    public String index(Model model) {
+    public String index(Model model, @LoginUser SessionUser user) {
         model.addAttribute("posts", postsService.findAllDesc());
+
+        if(user != null) {
+            model.addAttribute("userName", user.getName());
+        }
         return "index";
     }
 
