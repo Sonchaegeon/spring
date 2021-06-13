@@ -22,7 +22,7 @@ notifications:
       - 'thscorjs1002@naver.com'
 
 before_deploy:
-   - zip -r aws-springboot-book ./book
+   - zip -r aws-springboot-book *
    - mkdir -p deploy
    - mv aws-springboot-book.zip deploy/aws-springboot-book.zip
 
