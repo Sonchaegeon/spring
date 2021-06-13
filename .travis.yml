@@ -12,7 +12,7 @@ cache:
     - '$HOME/.m2/repository'
     - '$HOME/.gradle'
 
-script: ".gradlew clean build"
+script: "./book/gradlew clean build"
 
 notifications:
   email:
