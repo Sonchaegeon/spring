@@ -20,3 +20,21 @@ notifications:
   email:
     recipients:
       - 'thscorjs1002@naver.com'
+
+before_deploy:
+   - zip -r aws-springboot-book ./book
+   - mkdir -p deploy
+   - mv aws-springboot-book.zip deploy/aws-springboot-book.zip
+
+deploy:
+   - provider: s3
+     access_key_id: $AWS_ACCESS_KEY
+
+     secret_access_key: $AWS_SECRET_KEY
+
+     buket: aws-springboot-builds
+     region: ap-northeast-2
+     skip_cleanup: true
+     acl: private
+     local_dir: deploy
+     wait-until-deployed: true
