@@ -14,7 +14,7 @@ cache:
 
 script:
    - "cd book" 
-   - ".gradlew clean build"
+   - "./gradlew clean build"
 
 notifications:
   email:
