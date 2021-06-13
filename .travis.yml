@@ -13,43 +13,39 @@ cache:
     - '$HOME/.gradle'
 
 script:
-   - "cd book" 
-   - "./gradlew clean build"
+  - "cd book"
+  - "./gradlew clean build"
+
+before_deploy:
+  - zip -r aws-springboot-book *
+  - mkdir -p deploy
+  - mv aws-springboot-book.zip deploy/aws-springboot-book.zip
+
+deploy:
+  - provider: s3
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: aws-springboot-builds # S3 버킷
+    region: ap-northeast-2
+    skip_cleanup: true
+    acl: private # zip 파일 접근을 private으로
+    local_dir: deploy # before_deploy에서 생성한 디렉토리
+    wait-until-deployed: true
+
+  - provider: codedeploy
+    access_key_id: $AWS_ACCESS_KEY # Travis repo settings에 설정된 값
+    secret_access_key: $AWS_SECRET_KEY # Travis repo settings에 설정된 값
+    bucket: aws-springboot-builds # S3 버킷
+    key: aws-springboot-book.zip # 빌드 파일을 압축해서 전달
+    bundle_type: zip
+    application: aws-springboot-book # 웹 콘솔에서 등록한 CodeDeploy 어플리케이션
+    deployment_group: aws-springboot-book-group # 웹 콘솔에서 등록한 CodeDeploy 배포 그룹
+    region: ap-northeast-2
+    wait-until-deployed: true
 
 notifications:
   email:
     recipients:
       - 'thscorjs1002@naver.com'
 
-before_deploy:
-   - zip -r aws-springboot-book *
-   - mkdir -p deploy
-   - mv aws-springboot-book.zip deploy/aws-springboot-book.zip
 
-deploy:
-   - provider: s3
-     access_key_id: $AWS_ACCESS_KEY
-
-     secret_access_key: $AWS_SECRET_KEY
-
-     bucket: aws-springboot-builds
-     region: ap-northeast-2
-     skip_cleanup: true
-     acl: private
-     local_dir: deploy
-     wait-until-deployed: true
-
-   - provider: codedeploy
-     access_key_id: $AWS_ACCESS_KEY
-     secret_access_key: $AWS_SECRET_KEY
-
-     bucket: aws-springboot-builds
-     key: aws-springboot-book.zip
-
-     bundle_type: zip
-     application: aws-springboot-book
-
-     deployment_group: aws-springboot-book-group
-
-     region: ap-northeast-2
-     wait-until-deployed: true
