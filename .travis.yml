@@ -38,3 +38,17 @@ deploy:
      acl: private
      local_dir: deploy
      wait-until-deployed: true
+   - provider: codedeploy
+     access_key_id: $AWS_ACCESS_KEY
+     secret_access_key: $AWS_SECRET_KEY
+
+     bucket: aws-springboot-builds
+     key: aws-springboot-book.zip
+
+     bundle_type: zip
+     application: aws-springboot-book
+
+     deployment_group: aws-springboot-book-group
+
+     region: ap-northeast-2
+     wait-until-deployed: true
